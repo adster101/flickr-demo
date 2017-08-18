@@ -1,0 +1,59 @@
+<!-- Load the Polymer.Element base class -->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+
+<dom-module id="my-new-view">
+  <!-- Defines the element's style and local DOM -->
+  <template>
+  <style include="iron-flex iron-flex-alignment">
+
+    <style>
+
+      :host {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      iron-list {
+        flex: 1 1 auto;
+      }
+
+
+    </style>
+
+    <h1>Flickr Feed</h1>
+    <iron-ajax url="http://api.hastings.digital/flickr.php" last-response="{{data}}" auto></iron-ajax>
+
+    <iron-list items="[[data]]" as="item">
+
+    <template>
+
+    <article  class="post layout horizontal">
+      <section>
+        <img src="[[item.m_url]]" />
+      </section>
+      <header>
+       <a name="new-view" href="[[rootPath]]post-view/{{urlencode(item.l_url)}}">
+         [[item.title]]
+        </a>
+      </header>
+    </article>
+  </template>
+</iron-list>
+  </template>
+  <script>
+    // Your new element extends the Polymer.Element base class
+    class MyNewView extends Polymer.Element {
+      static get is() { return 'my-new-view'; }
+      urlencode(blah){
+        return btoa(unescape(encodeURIComponent(blah)));
+      }
+    }
+    //Now, register your new custom element so the browser can use it
+    customElements.define(MyNewView.is, MyNewView);
+  </script>
+</dom-module>

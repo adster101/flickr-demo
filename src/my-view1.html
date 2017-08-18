@@ -1,0 +1,152 @@
+<!-- Load the Polymer.Element base class -->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+
+<dom-module id="my-view1">
+  <!-- Defines the element's style and local DOM -->
+  <template>
+  <style include="iron-flex iron-flex-alignment"></style>
+
+    <style>
+    #itemsList,
+        #selectedItemsList {
+          @apply --layout-flex;
+        }
+
+        .item {
+          @apply --layout-horizontal;
+          cursor: pointer;
+          padding: 16px 22px;
+          border-bottom: 1px solid #DDD;
+        }
+
+        .item:focus,
+        .item.selected:focus {
+          outline: 0;
+          background-color: #ddd;
+        }
+
+        .item.selected .star {
+          color: var(--paper-blue-600);
+        }
+
+        .avatar {
+          height: 80px;
+          width: 80px;
+          border-radius: 40px;
+          box-sizing: border-box;
+          background-color: #ddd;
+        }
+
+        .pad {
+          @apply --layout-flex;
+          @apply --layout-vertical;
+          padding: 0 16px;
+        }
+
+        .pad-right {
+          padding-right:16px;
+
+        }
+
+        .primary {
+          font-size: 16px;
+          margin-bottom:8px;
+          @apply --layout-flex;
+          @apply --layout-vertical;
+        }
+
+        .small {
+          @apply --paper-font-body1;
+        }
+
+        a {
+          text-decoration:none;
+          color: var(--paper-pink-500);
+
+        }
+
+        .secondary {
+          font-size: 14px;
+          @apply --layout-flex;
+          @apply --layout-horizontal;
+        }
+
+        .dim {
+          color: gray;
+        }
+
+        @media (min-width: 800px) {
+          .hidden-wide {
+            display: none;
+          }
+        }
+
+        @media (max-width: 800px) {
+          .hidden-mobile {
+            display: none;
+          }
+        }
+    </style>
+
+    <iron-ajax url="http://api.hastings.digital/flickr.php" last-response="{{data}}" auto></iron-ajax>
+
+
+    <iron-list id="items-list" items="[[data]]" as="item">
+    <template>
+      <div>
+      <div class="item">
+        <a href="[[rootPath]]post-view/{{urlencode(item.l_url)}}/{{urlencode(item.title)}}">
+        <iron-image class="avatar"
+          sizing="cover" preload fade src="[[item.m_url]]"></iron-image>
+        </a>
+        <div class="pad">
+          <div class="primary">
+            <a name="new-view" href="[[rootPath]]post-view/{{urlencode(item.l_url)}}/{{urlencode(item.title)}}">
+              {{truncate(item.title)}}
+            </a>
+            <time class="hidden-wide small">
+              [[item.date_taken_nice]]
+            </time>
+          </div>
+          <div class="secondary">
+            <address class="pad-right">
+              <a href="[[item.author_url]]" target="_blank">
+                [[item.author_name]]
+              </a>
+            </address>
+            <time class="hidden-mobile pad-right">
+              [[item.date_taken_nice]]
+            </time>
+            <a href="[[item.url]]" target="_blank">
+              View on Flickr
+            </a>
+          </div>
+        </div>
+      </div>
+      </div>
+    </template>
+  </iron-list>
+</template>
+  <script>
+    // Your new element extends the Polymer.Element base class
+    class MyView1 extends Polymer.Element {
+      static get is() { return 'my-view1'; }
+      urlencode(blah){
+        return btoa(unescape(encodeURIComponent(blah)));
+      }
+
+      truncate(title) {
+        var string = title.substring(0,75);
+        return string
+
+      }
+    }
+    //Now, register your new custom element so the browser can use it
+    customElements.define(MyView1.is, MyView1);
+  </script>
+</dom-module>

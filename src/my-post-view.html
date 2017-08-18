@@ -1,0 +1,60 @@
+<!-- Load the Polymer.Element base class -->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+
+
+<dom-module id="my-post-view">
+  <!-- Defines the element's style and local DOM -->
+  <template>
+  <style include="iron-flex iron-flex-alignment">
+
+    <style>
+
+      :host {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .pad {
+        padding: 16px;
+      }
+
+    </style>
+    <app-route
+        route="{{route}}"
+        pattern="/:image_url/:title"
+        data="{{routeData}}"></app-route>
+
+        <div class="pad">
+          <a href="/">
+            <paper-icon-button icon="arrow-back" alt="back arrow">
+              Back
+            </paper-icon-button>Back
+          </a>
+    <h3>{{urldecode(routeData.title)}}</h3>
+
+      <img src="{{urldecode(routeData.image_url)}}" />
+
+</div>
+
+  </template>
+  <script>
+    // Your new element extends the Polymer.Element base class
+    class MyPostView extends Polymer.Element {
+
+      static get is() { return 'my-post-view'; }
+
+      urldecode(blah){
+        return atob(blah);
+
+      }
+    }
+
+    //Now, register your new custom element so the browser can use it
+    customElements.define(MyPostView.is, MyPostView);
+
+    // Declare properties for the element's public API
+  </script>
+</dom-module>
